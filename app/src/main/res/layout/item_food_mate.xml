@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_item_mate_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:layout_margin="5dp"
+        android:text="制作材料"
+        android:background="@drawable/orange_cir_bg"
+        android:textColor="@color/col_text1"
+        android:textSize="16dp" />
+
+</LinearLayout>
