@@ -52,9 +52,12 @@ public class CollectFragment extends BaseFragment {
                 if (view.getId() == R.id.tv_item_catemeal_collect) {
                     //操作该条数据，收藏或者取消收藏
                     FoodBean mFoodBean = colletAdapter.getData().get(position);
+                    //缓存数据移除，必须保证代码正确性，否则下面代码页面移除也是个假象移除
                     FoodUtils.collectFoodOne(mFoodBean);
-                    //收藏列表需要删除该条数据
+                    //页面移除，收藏列表需要删除该条数据
                     colletAdapter.removeAt(position);
+                    //或者刷新数据，建议上面一种
+                   // initData();
                 }
             }
         });
