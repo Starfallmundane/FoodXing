@@ -59,7 +59,9 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initData() {
         getHomeNetData(true);
+//        getHomeShopData();
     }
+
 
     @Override
     protected void initListener() {
@@ -200,4 +202,51 @@ public class HomeFragment extends BaseFragment {
         return errorView;
     }
 
+
+    private void getHomeShopData2() {
+        OkHttpUtils
+                .post()
+                .url("http://v.jspang.com:8088/baixing/wxmini/homePageContent")
+                .addParams("lon","115.02932")
+                .addParams("lat","35.76189")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), "商城---请求失败", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int ids) {
+                        Log.e("liuxing", "商城---成功数据：" + response);
+
+                    }
+                });
+    }
+
+    //   bdfa9a9a358f436594a740e486fd2060
+    //   c0999c03df344e1ab322b3ce6dffdeb1
+    private void getHomeShopData() {
+        OkHttpUtils
+                .post()
+                .url("http://v.jspang.com:8088/baixing/wxmini/getGoodDetailById")
+                .addParams("goodId","c0999c03df344e1ab322b3ce6dffdeb1.02932")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), "商城---请求失败", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int ids) {
+                        Log.e("liuxing", "商城---成功数据：" + response);
+
+                    }
+                });
+    }
 }

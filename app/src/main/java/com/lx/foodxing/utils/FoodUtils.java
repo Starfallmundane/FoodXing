@@ -77,8 +77,7 @@ public class FoodUtils {
 //        Log.e("liuxing","取出字符串"+colletJson.toString());
         if (!TextUtils.isEmpty(colletJson)) {
             //Json字符串转化成集合
-            collectData = new Gson().fromJson(colletJson, new TypeToken<List<FoodBean>>() {
-            }.getType());
+            collectData = new Gson().fromJson(colletJson, new TypeToken<List<FoodBean>>() {}.getType());
         }
         Log.e("liuxing", "取值数据--" + collectData.size());
         return collectData;
@@ -86,7 +85,7 @@ public class FoodUtils {
 
     //进行缓存收藏数据
     public static void setFoodCache(List<FoodBean> data) {
-        //集合转化成
+        //集合转化成Json字符串
         String colletJson = new Gson().toJson(data);
         //保存Json字符串
         PrefUtils.getInstance(MyApplication.getInstance()).put(Constant.spkey_collect, colletJson);      //存储在SP里
