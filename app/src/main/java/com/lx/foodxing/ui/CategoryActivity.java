@@ -212,7 +212,7 @@ public class CategoryActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean isFresh = MyApplication.isFreshCategoryCollet = true;
+        boolean isFresh = MyApplication.isFreshCategoryCollet;
         if (isFresh) {
             //刷新跳转时，做标记的该条数据
             cateAdapter.notifyItemChanged(saveStartPosition);
