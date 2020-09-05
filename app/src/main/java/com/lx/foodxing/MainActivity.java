@@ -16,9 +16,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.lx.foodxing.adapter.MenuLeftAdapter;
 import com.lx.foodxing.base.BaseActivity;
+import com.lx.foodxing.event.MessageWrap;
 import com.lx.foodxing.fragment.CollectFragment;
 import com.lx.foodxing.fragment.HomeFragment;
 import com.lx.foodxing.ui.FilterActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -38,6 +43,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
         initViewBotton();     //初始化底部导航控件
         initFragments();//初始化fragment
         initMenu();//初始化侧拉菜单Menu
@@ -127,5 +133,21 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 注意一个大坑货
+     * EventBus不能直接在Fragment里使用
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetMessage(MessageWrap message) {
+        CollectFragment collectFragment= (CollectFragment) fragments.get(1);
+        collectFragment.tvResult.setText(message.message);
     }
 }

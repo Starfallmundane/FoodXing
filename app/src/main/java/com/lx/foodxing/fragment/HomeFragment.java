@@ -3,6 +3,7 @@ package com.lx.foodxing.fragment;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,16 +19,23 @@ import com.google.gson.reflect.TypeToken;
 import com.lx.foodxing.R;
 import com.lx.foodxing.adapter.HomeAdapter;
 import com.lx.foodxing.base.BaseFragment;
+import com.lx.foodxing.bean.BaseBean;
 import com.lx.foodxing.bean.CategoryBean;
+import com.lx.foodxing.bean.HomeBean;
+import com.lx.foodxing.event.MessageWrap;
 import com.lx.foodxing.ui.CategoryActivity;
 import com.lx.foodxing.utils.Constant;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 
@@ -36,6 +44,7 @@ public class HomeFragment extends BaseFragment {
     private HomeAdapter homeAdapter;
     private SwipeRefreshLayout srl_home;
     private RecyclerView mRecyclerView;
+    private TextView tv_send;
 
 
     @Override
@@ -46,7 +55,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initView() {
         //列表控件
-        homeAdapter = new HomeAdapter(null);
+        homeAdapter = new HomeAdapter(null,getActivity());
+        tv_send = view.findViewById(R.id.tv_send);
         mRecyclerView = view.findViewById(R.id.rv_home);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mRecyclerView.setAdapter(homeAdapter);
@@ -54,12 +64,20 @@ public class HomeFragment extends BaseFragment {
 
         initRefreshLayout();
         initLoadMore();
+
+        tv_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new MessageWrap("啦啦啦啦啦啦啦啦啦"));
+            }
+        });
     }
 
     @Override
     protected void initData() {
-        getHomeNetData(true);
+//        getHomeNetData(true);
 //        getHomeShopData();
+        getHomeShopData2();
     }
 
 
@@ -70,9 +88,9 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 CategoryBean mCategoryBean = homeAdapter.getData().get(position);
-                Intent intent=new Intent(getActivity(), CategoryActivity.class);
-                intent.putExtra("cateId",mCategoryBean.getId());
-                intent.putExtra("cateTitle",mCategoryBean.getTitle());
+                Intent intent = new Intent(getActivity(), CategoryActivity.class);
+                intent.putExtra("cateId", mCategoryBean.getId());
+                intent.putExtra("cateTitle", mCategoryBean.getTitle());
                 startActivity(intent);
             }
         });
@@ -143,9 +161,8 @@ public class HomeFragment extends BaseFragment {
                         try {
                             //解析数据
                             jsonObject = new JSONObject(response);
-                            String category = jsonObject.getString("category");
-                            List<CategoryBean> newData = new Gson().fromJson(category, new TypeToken<List<CategoryBean>>() {
-                            }.getType());
+                            String category = jsonObject.getString("data");
+                            List<CategoryBean> newData = new Gson().fromJson(category, new TypeToken<List<CategoryBean>>() {}.getType());
                             Log.e("liuxing", "新数据==" + newData.size());
 
                             //如果数据有code,判断code==200,如果不是200，就是 数据错误，显示错误界面
@@ -204,11 +221,16 @@ public class HomeFragment extends BaseFragment {
 
 
     private void getHomeShopData2() {
+        //lon:115.02932   lat:35.76189
+        Map<String, String> map=new HashMap<>();
+        map.put("lon","115.02932");
+        map.put("lat","35.76189");
         OkHttpUtils
                 .post()
                 .url("http://v.jspang.com:8088/baixing/wxmini/homePageContent")
-                .addParams("lon","115.02932")
-                .addParams("lat","35.76189")
+                .params(map)
+//                .addParams("lon", "115.02932")
+//                .addParams("lat", "35.76189")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -220,8 +242,13 @@ public class HomeFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int ids) {
-                        Log.e("liuxing", "商城---成功数据：" + response);
-
+//                        Log.e("liuxing", "商城---成功数据：" + response);
+                        Gson gson = new Gson();
+                        BaseBean baseBean = gson.fromJson(response, BaseBean.class);
+                        if (baseBean.isSuccess()) {
+                            BaseBean<HomeBean> data = new Gson().fromJson(response, new TypeToken<BaseBean<HomeBean>>() {}.getType());
+                            Log.e("liuxing", "商城---解析成功"+data);
+                        }
                     }
                 });
     }
@@ -229,10 +256,12 @@ public class HomeFragment extends BaseFragment {
     //   bdfa9a9a358f436594a740e486fd2060
     //   c0999c03df344e1ab322b3ce6dffdeb1
     private void getHomeShopData() {
+        Map<String, String> params=new HashMap<String, String>();
         OkHttpUtils
                 .post()
                 .url("http://v.jspang.com:8088/baixing/wxmini/getGoodDetailById")
-                .addParams("goodId","c0999c03df344e1ab322b3ce6dffdeb1.02932")
+//                .params()
+                .addParams("goodId", "c0999c03df344e1ab322b3ce6dffdeb1.02932")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -244,8 +273,16 @@ public class HomeFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int ids) {
-                        Log.e("liuxing", "商城---成功数据：" + response);
-
+//                        Log.e("liuxing", "商城---成功数据：" + response);
+                        Gson gson = new Gson();
+                        BaseBean baseBean = gson.fromJson(response, BaseBean.class);
+                        if (baseBean.isSuccess()) {
+                            //情况1：data里面是javabean对象
+                            BaseBean<HomeBean> data = new Gson().fromJson(response, new TypeToken<BaseBean<HomeBean>>() {}.getType());
+                            //情况2：data里面是包含javabean对象的集合
+//                            BaseBean<ArrayList<HomeBean>> data2 = new Gson().fromJson(response, new TypeToken<BaseBean<ArrayList<HomeBean>>>() {}.getType());
+                            Log.e("liuxing", "商城---解析成功"+data);
+                        }
                     }
                 });
     }

@@ -1,6 +1,9 @@
 package com.lx.foodxing.fragment;
 
+import android.app.Activity;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,7 +17,11 @@ import com.lx.foodxing.R;
 import com.lx.foodxing.adapter.CategoryAdapter;
 import com.lx.foodxing.base.BaseFragment;
 import com.lx.foodxing.bean.FoodBean;
+import com.lx.foodxing.event.MessageWrap;
 import com.lx.foodxing.utils.FoodUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -23,6 +30,7 @@ public class CollectFragment extends BaseFragment {
     private CategoryAdapter colletAdapter;
     private SwipeRefreshLayout srl_collet;
     private RecyclerView mRecyclerView;
+    public TextView tvResult;
 
     @Override
     protected int getLayoutResId() {
@@ -33,6 +41,7 @@ public class CollectFragment extends BaseFragment {
     protected void initView() {
         //列表控件
         colletAdapter = new CategoryAdapter(null);
+        tvResult = view.findViewById(R.id.tv_result);
         mRecyclerView = view.findViewById(R.id.rv_collect);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(colletAdapter);
@@ -73,5 +82,13 @@ public class CollectFragment extends BaseFragment {
             //记的刷新后设置为false，取消标识
             MyApplication.isFreshCollet=false;
         }
+
+        ((Activity)getActivity()).runOnUiThread(new Runnable() {
+            public void run() {
+
+            }
+        });
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.lx.foodxing.adapter;
 
+import android.content.Context;
 import android.graphics.Color;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,18 +24,11 @@ public class HomeAdapter extends BaseQuickAdapter<CategoryBean, BaseViewHolder> 
      *
      * @param data
      */
-    public HomeAdapter(List<CategoryBean> data) {
-        /**
-         *  布局传递
-         *  *****
-         *  这里一定要说明一点
-         *  列表竖直方向时，item_left_menu最外层布局LinearLayout，高度必须用 android:layout_height="wrap_content"
-         *  列表竖横方向时，item_left_menu最外层布局LinearLayout，宽度必须用 android:layout_height="layout_width"
-         *  这种情况是为了防止一个条目就把屏幕占满了只能显示一条的情况
-         *
-         *  以后所有列表都是这样情况设置的
-         */
+
+    private Context mContext;
+    public HomeAdapter(List<CategoryBean> data, Context mContext) {
         super(R.layout.item_home_category);
+        this. mContext=mContext;
     }
 
 

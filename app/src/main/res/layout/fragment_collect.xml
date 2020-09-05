@@ -7,6 +7,13 @@
     <!--安卓自带系统刷新控件  SwipeRefreshLayout  -->
     <!--需要添加远程库  implementation 'com.android.support:design:29.0.0'   -->
 
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimary"
+        android:text="接收消息内容--eventbus"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_collect"
