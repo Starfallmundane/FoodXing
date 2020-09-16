@@ -1,9 +1,11 @@
 package com.lx.foodxing.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,11 +19,13 @@ import com.lx.foodxing.R;
 import com.lx.foodxing.adapter.CategoryAdapter;
 import com.lx.foodxing.base.BaseFragment;
 import com.lx.foodxing.bean.FoodBean;
-import com.lx.foodxing.event.MessageWrap;
+import com.lx.foodxing.ui.NewActivity;
 import com.lx.foodxing.utils.FoodUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.util.List;
 
@@ -39,12 +43,22 @@ public class CollectFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
+
         //列表控件
         colletAdapter = new CategoryAdapter(null);
+        TextView tv_new = view.findViewById(R.id.tv_new);
         tvResult = view.findViewById(R.id.tv_result);
         mRecyclerView = view.findViewById(R.id.rv_collect);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(colletAdapter);
+
+        tv_new.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), NewActivity.class));
+            }
+        });
     }
 
     @Override
@@ -91,4 +105,21 @@ public class CollectFragment extends BaseFragment {
     }
 
 
+    /**
+     * 回答问题成功时，需要检查该列表，如果存在相同问题，则移除该条数据
+     */
+    @Subscriber(tag = "mytag_communicate_changeanswer")
+    private void updateDataWithTag(String message) {
+        if (message != null) {
+            Log.e("liuxing","我接收的数据"+message);
+
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

@@ -23,4 +23,11 @@
         <item name="android:layout_weight">1</item>
     </style>
 
+    <style name="style_textsize">
+        <item name="android:textSize">23sp</item>
+    </style>
+    <style name="style_textsize1">
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

@@ -32,7 +32,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +44,7 @@ public class HomeFragment extends BaseFragment {
     private SwipeRefreshLayout srl_home;
     private RecyclerView mRecyclerView;
     private TextView tv_send;
+    private TextView tv_sendnew;
 
 
     @Override
@@ -57,6 +57,7 @@ public class HomeFragment extends BaseFragment {
         //列表控件
         homeAdapter = new HomeAdapter(null,getActivity());
         tv_send = view.findViewById(R.id.tv_send);
+        tv_sendnew = view.findViewById(R.id.tv_sendnew);
         mRecyclerView = view.findViewById(R.id.rv_home);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mRecyclerView.setAdapter(homeAdapter);
@@ -69,6 +70,12 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new MessageWrap("啦啦啦啦啦啦啦啦啦"));
+            }
+        });
+        tv_sendnew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                org.simple.eventbus.EventBus.getDefault().post("小米", "mytag_communicate_changeanswer");
             }
         });
     }

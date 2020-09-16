@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.FilterActivity"></activity>
+        <activity android:name=".ui.NewActivity"></activity>
+        <activity android:name=".ui.FilterActivity" />
         <activity android:name=".ui.FoodActivity" />
         <activity android:name=".ui.CategoryActivity" />
         <activity android:name=".MainActivity">

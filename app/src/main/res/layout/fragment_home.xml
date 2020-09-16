@@ -24,6 +24,18 @@
             android:textColor="@color/white"
             android:textSize="16dp" />
 
+        <TextView
+            android:id="@+id/tv_sendnew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/orange_cir_bg"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_margin="15dp"
+            android:text="发送消息--封装的eventbus"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_home"
